@@ -1,10 +1,14 @@
 <?php
 session_start();
+require_once 'Tree.php';
 require_once 'includes/library.php';
 alwaysFlush();
 
-$vars = Taxon::$higherTaxa;
-$vars[] = 'block';
+// Fetch these vars only
+$vars = array(
+    'taxon'
+);
+
 // Fetch variables from POST if at least one has been submitted
 if (!empty($_POST)) {
     foreach ($vars as $var) {
@@ -15,7 +19,6 @@ if (!empty($_POST)) {
             $$var = '';
         }
         $_SESSION[$var] = $$var;
-        //echo $var . ' = ' . $$var . '<br>';
     }
 }
 // ... otherwise try SESSION
@@ -27,7 +30,6 @@ else {
         else {
             $$var = '';
         }
-        //echo $var . ' = ' . $$var . '<br>';
     }
 }
 ?>

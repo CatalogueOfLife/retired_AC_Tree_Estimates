@@ -11,19 +11,12 @@ function alwaysFlush ()
     set_time_limit(0);
 }
 
-function createDbInstance ($name)
+function formSubmitted ()
 {
-    $ini = parse_ini_file('config/settings.ini', true);
-    $config = $ini['db'];
-    $dbOptions = array();
-    if (isset($config["options"])) {
-        $options = explode(",", $config["options"]);
-        foreach ($options as $option) {
-            $pts = explode("=", trim($option));
-            $dbOptions[$pts[0]] = $pts[1];
-        }
-        return DbHandler::createInstance($name, $config, $dbOptions);
+    if (isset($_POST['taxon']) && $_POST['taxon'] != '') {
+        return true;
     }
+    return false;
 }
 
 

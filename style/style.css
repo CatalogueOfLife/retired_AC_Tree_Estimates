@@ -1,0 +1,13 @@
+body {
+	font-family: Verdana;
+	width: 800px;
+}
+
+p, li {
+	font-size: 12px;
+}
+
+.version {
+	margin: 0 0 25px 0;
+	font-size: 10px;
+}
