@@ -11,3 +11,8 @@ p, li {
 	margin: 0 0 25px 0;
 	font-size: 10px;
 }
+
+.result {
+	margin: 20px 0;
+	font-size: 12px;
+}
