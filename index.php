@@ -20,6 +20,11 @@
     if (formSubmitted()) {
         include 'includes/results.php';
     }
-?>
+
+    //print_r($tree->getChildren(0));
+
+    ?>
+
+    <div id="tree"></div>
 </body>
 </html>

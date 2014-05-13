@@ -10,6 +10,9 @@ class Tree
     private $_te_dbh;
     // Results
     private $_res;
+    // List of higher taxa
+    private $_higherTaxa = array('class', 'family', 'kingdom', 'not assigned', 'order',
+        'phylum', 'superfamily');
 
     // Collects bootstrap errors
     public $startUpErrors;
@@ -30,6 +33,126 @@ class Tree
     public function __destruct ()
     {
         //
+    }
+
+    public function getChildren ($id)
+    {
+        $q = 'SELECT t1.`taxon_id` AS `id`, t1.`name`, t1.`rank`, t1.`total_species_estimation`,
+            t1.`total_species`,  t1.`estimate_source`,  t2.`taxon_id` AS `child_id`,
+            t2.`name` AS `child_name`, t2.`rank` AS `child_rank`, t2.`total_species_estimation` AS
+            `child_total_species_estimation`, t2.`total_species` AS `child_total_species`,
+            t2.`estimate_source` AS `child_estimate_source`
+            FROM `_taxon_tree` AS t1
+            LEFT JOIN `_taxon_tree` AS t2 ON t1.`taxon_id` = t2.`parent_id`
+            WHERE t1.`parent_id` = ? ORDER BY t1.`name`, t2.`name`';
+        $stmt = $this->_bs_dbh->prepare($q);
+        $stmt->execute(array($id));
+        $d = array();
+        // Use id as node lookup in tree array
+        while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            if (!isset($d[$r['id']])) {
+                $d[$r['id']] = array(
+                    'title' => $this->_setTitle($r),
+                    'key' => $r['id'],
+                    'rank' => $r['rank'],
+                    'name' => $r['name'],
+                    'lazy' => true
+                );
+            }
+            if (!isset($d[$r['id']]['children'][$r['child_id']])) {
+                $d[$r['id']]['children'][$r['child_id']] = array(
+                    'title' => $this->_setTitle($r, 'child_'),
+                    'key' => $r['child_id'],
+                    'rank' => $r['child_rank'],
+                    'name' => $r['child_name'],
+                    'lazy' => true
+                );
+            }
+        }
+        // Strip keys before returning as json
+        return json_encode($this->_fixKeys($d));
+    }
+
+    public function getEstimate ($p)
+    {
+        $q = 'SELECT `id`, `kingdom`, `rank`, `name`, `estimate`, `source` FROM `estimates`
+            WHERE `kingdom` = ? AND `rank` = ? AND `name` = ?';
+        $stmt = $this->_te_dbh->prepare($q);
+        $stmt->execute($p);
+        $r = $stmt->fetch(PDO::FETCH_ASSOC);
+        return !empty($r) ? json_encode($r) : json_encode(
+            array(
+                'kingdom' => $p[0],
+                'rank' => ucfirst($p[1]),
+                'name' => $p[2],
+                'estimate' => null,
+                'source' => null,
+                'id' => null
+            )
+        );
+    }
+
+    public function saveEstimate ($p)
+    {
+        if (!empty($p['id'])) {
+            $q = 'UPDATE `estimates` SET `kingdom` = :kingdom, `rank` = :rank, `name` = :name, ' .
+                '`estimate` = :estimate, `source` = :source WHERE `id` = :id';
+        } else {
+            $q = 'INSERT INTO `estimates` (`kingdom`, `rank`, `name`, `estimate`, `source`) ' .
+                'VALUES (:kingdom, :rank, :name, :estimate, :source)';
+            unset($p['id']);
+        }
+        $stmt = $this->_te_dbh->prepare($q);
+        foreach ($p as $k => &$v) {
+            $stmt->bindParam($k, $v);
+        }
+        return $stmt->execute() ?
+            'Estimate saved for ' . $p['rank'] . ' ' . $p['name'] :
+            'Error: could not save estimate for ' . $p['rank'] . ' ' . $p['name'];
+    }
+
+    private function _setTitle ($r, $prefix = '')
+    {
+        $id = $r[$prefix . 'id'];
+        $rank = $r[$prefix . 'rank'];
+        $name = $r[$prefix . 'name'];
+        $count = $r[$prefix . 'total_species'];
+        $estimation = $r[$prefix . 'total_species_estimation'];
+        if (!in_array($rank, $this->_higherTaxa)) {
+            $name = "<em>$name</em>";
+        }
+        if ($rank !== 'genus' && !in_array($rank, $this->_higherTaxa)) {
+            $rank = $count = '';
+        }
+        $title =  (!empty($rank) ? ucfirst($rank) . ' ' : '') . $name;
+        if ($count !== '') {
+           $title .= ' (estimate: ' . (!empty($estimation) ? $estimation : '-') .
+            ', total: ' . (!empty($count) ? $count : '-') . ')';
+        }
+        return $title;
+    }
+
+    private function _getKingdom ($r)
+    {
+        $q = 'SELECT `kingdom` FROM `_search_scientific` WHERE `id` = ?';
+        $stmt = $this->_bs_dbh->prepare($q);
+        $stmt->execute(array($r['id']));
+        $r = $stmt->fetch(PDO::FETCH_ASSOC);
+        return !empty($r) ? $r['kingdom'] : null;
+    }
+
+    private function _fixKeys ($array)
+    {
+        $numberCheck = false;
+        foreach ($array as $k => $val) {
+            if (is_array($val)) {
+                $array[$k] = $this->_fixKeys($val);
+            }
+            if (is_numeric($k)) {
+                $numberCheck = true;
+            }
+        }
+        return $numberCheck === true ? array_values($array) : $array;
     }
 
     public static function getVersion ()

@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once 'Tree.php';
+$tree = new Tree();
 require_once 'includes/library.php';
 alwaysFlush();
 
