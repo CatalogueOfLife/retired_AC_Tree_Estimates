@@ -1,4 +1,4 @@
-[db]
+[basescheme]
 dbname = @DBNAME@
 host = @DBHOST@
 username = @DBUSER@
@@ -8,9 +8,15 @@ driver = mysql
 ; separate options by comma
 options = "PDO::MYSQL_ATTR_INIT_COMMAND=set names utf8"
 
-[export]
-delimiter = "\t"                    ; leave empty for default comma, use "\t" for tab
-separator =                         ; leave empty for default double quote; if tab is used as delimiter, no separator will be used
+[tree_estimates]
+dbname = @DBNAME2@
+host = @DBHOST2@
+username = @DBUSER2@
+password = @DBPASS2@
+port =  ; Can be empty
+driver = mysql
+; separate options by comma
+options = "PDO::MYSQL_ATTR_INIT_COMMAND=set names utf8"
 
 [settings]
 version = @APP.VERSION@

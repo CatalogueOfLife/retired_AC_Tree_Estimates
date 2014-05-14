@@ -51,13 +51,16 @@ class Tree
         // Use id as node lookup in tree array
         while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
             if (!isset($d[$r['id']])) {
-                $d[$r['id']] = array(
+                $t = array(
                     'title' => $this->_setTitle($r),
                     'key' => $r['id'],
                     'rank' => $r['rank'],
-                    'name' => $r['name'],
-                    'lazy' => true
+                    'name' => $r['name']
                 );
+                if (in_array($r['rank'], $this->_higherTaxa)) {
+                    $t['lazy'] = true;
+                }
+                $d[$r['id']] = $t;
             }
             if (!isset($d[$r['id']]['children'][$r['child_id']])) {
                 $d[$r['id']]['children'][$r['child_id']] = array(
@@ -94,6 +97,8 @@ class Tree
 
     public function saveEstimate ($p)
     {
+        // Make sure estimate is a number
+        $p['estimate'] = (int)$p['estimate'];
         if (!empty($p['id'])) {
             $q = 'UPDATE `estimates` SET `kingdom` = :kingdom, `rank` = :rank, `name` = :name, ' .
                 '`estimate` = :estimate, `source` = :source WHERE `id` = :id';
@@ -111,6 +116,42 @@ class Tree
             'Error: could not save estimate for ' . $p['rank'] . ' ' . $p['name'];
     }
 
+    public function copyEstimates () {
+        $q = 'SELECT * FROM `estimates`';
+        $stmt = $this->_te_dbh->query($q);
+        while ($r = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $id = $this->_getTaxonTreeId(array($r['name'], $r['rank'], $r['kingdom']));
+            if ($id) {
+                $this->_updateTaxonTree(array($r['estimate'], $r['source'], $id));
+            }
+        }
+    }
+
+    private function _getTaxonTreeId ($p)
+    {
+        $q = 'SELECT t1.`taxon_id` AS `id` FROM `_taxon_tree` AS t1
+            LEFT JOIN `_search_scientific` AS t2 ON t1.`taxon_id` = t2.`id`
+            WHERE t1.`name` = ? AND t1.`rank` = ? AND t2.`kingdom` = ?';
+        $stmt = $this->_bs_dbh->prepare($q);
+        $stmt->execute($p);
+        $r = $stmt->fetch(PDO::FETCH_ASSOC);
+        return !empty($r) ? $r['id'] : false;
+    }
+
+    private function _updateTaxonTree ($p)
+    {
+        $q = 'UPDATE `_taxon_tree` SET `total_species_estimation` = ?,
+            `estimate_source` = ? WHERE `taxon_id` = ?';
+        $stmt = $this->_bs_dbh->prepare($q);
+        $stmt->execute($p);
+    }
+
+    private function _clearEstimates ()
+    {
+        $q = 'UPDATE `_taxon_tree` SET `total_species_estimation` = 0, `estimate_source` = ""';
+        $this->_bs_dbh->query($q);
+    }
+
     private function _setTitle ($r, $prefix = '')
     {
         $id = $r[$prefix . 'id'];
@@ -118,7 +159,7 @@ class Tree
         $name = $r[$prefix . 'name'];
         $count = $r[$prefix . 'total_species'];
         $estimation = $r[$prefix . 'total_species_estimation'];
-        if (!in_array($rank, $this->_higherTaxa)) {
+        if ($rank == 'genus') {
             $name = "<em>$name</em>";
         }
         if ($rank !== 'genus' && !in_array($rank, $this->_higherTaxa)) {

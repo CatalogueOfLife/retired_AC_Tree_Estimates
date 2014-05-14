@@ -13,7 +13,7 @@ function alwaysFlush ()
 
 function formSubmitted ()
 {
-    if (isset($_POST['taxon']) && $_POST['taxon'] != '') {
+    if (isset($_GET['copy'])) {
         return true;
     }
     return false;

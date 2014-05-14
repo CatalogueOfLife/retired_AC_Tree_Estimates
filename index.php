@@ -16,14 +16,12 @@
 <?php
     echo '<p class="version">Version ' . Tree::getVersion() . "</p>\n";
     // Test database handler first
-    include 'includes/form.php';
     if (formSubmitted()) {
-        include 'includes/results.php';
+        $tree->copyEstimates();
+        echo '<p style="color:red; font-weight: bold;" id="alert">Estimates copied successfully</p>';
     }
-
-    //print_r($tree->getChildren(0));
-
-    ?>
+    include 'includes/form.php';
+?>
 
     <div id="tree"></div>
 </body>

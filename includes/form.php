@@ -8,10 +8,10 @@
 
 <p style="width: 600px">Use this form to update species estimates in the Catalogue of Life.
 Estimates can be added to all higher taxa (kingdom to genus), but not to (infra)species. Browse to the
-appropriate taxon, click its name and add or update the data in the form. When ready, click 'Submit estimate'.</p>
+appropriate taxon, click its name and update the data in the form. When ready, click 'Submit estimate'.</p>
 
 <p style="width: 600px; margin-bottom: 30px;">Submitted estimates are not immediately reflected in the tree, as this would decrease performance.
-<a href="">Submit estimates to the CoL database now</a>.</p>
+<a href="?copy">Submit estimates to the CoL database now</a>.</p>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="estimate_form">
 <p><label for="kingdom">Kingdom</label><input id="kingdom" name="kingdom" type="text" value="" placeholder="Kingdom" size="25"></p>

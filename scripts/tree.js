@@ -1,3 +1,5 @@
+var higherTaxa = ["class", "family", "kingdom", "not assigned", "order",
+   "phylum", "superfamily", "genus"];
 
 function getKingdom (node) {
     if (node.parent.title == 'root')
@@ -12,7 +14,6 @@ $(function() {
         source: treeSource,
 		lazyLoad: function(event, data){
 		    var node = data.node;
-		    // Load child nodes via ajax GET /getTreeData?mode=children&parent=1234
 		    data.result = {
 	    	    url: "ajax/tree.php?id=",
 	    	    data: {
@@ -24,13 +25,13 @@ $(function() {
 	    icons: false,
 	    click: function(event, data) {
             var node = data.node;
-
             // Only for click and dblclick events:
             // 'title' | 'prefix' | 'expander' | 'checkbox' | 'icon'
             if (data.targetType == 'title') {
-            	var kingdom = getKingdom(node);
-            	var rank = node.data.rank;
-            	var name = node.data.name;
+            	if ($.inArray(node.data.rank, higherTaxa) === -1) {
+            		alert('Only higher taxa can have an estimate');
+            		return false;
+            	}
             	$.ajax({
             		url: "ajax/get_estimate.php",
             		data: {
@@ -62,6 +63,7 @@ function ucFirst(string) {
 $(function() {
     $("#estimate_form").submit(function() {
     	var submitForm = true;
+    	// Text fields cannot be empty
     	$("#estimate_form input:text").each(function() {
     		if ($(this).val().length === 0) {
     			alert(ucFirst($(this).attr('name')) + ' cannot be empty');
@@ -69,6 +71,11 @@ $(function() {
     			return false;
     		}
     	});
+    	if (isNaN($('#estimate').val())) {
+    		alert('Estimate ' + $('#estimate').val() + ' is not a number');
+    		submitForm = false;
+    		return false;
+    	}
     	if (submitForm) {
         	$.ajax({
         		type: "post",
@@ -82,4 +89,8 @@ $(function() {
     	}
     	return false;
     });
+});
+
+$(function() {
+	$("#alert").delay(2000).fadeOut(500);
 });
