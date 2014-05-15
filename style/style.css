@@ -22,24 +22,45 @@ label {
 	width: 100px;
 	float: left;
 	text-align: right;
-	padding-right: 5px;
-	font-size: 11px;
+	padding: 0 5px;
 	font-weight: bold;
 }
 
+input, label, textarea, .form_legend {
+	font-family: "Arial, Helvetica";
+	font-size: 11px;
+}
+
 button {
-	margin: 0 0 20px 110px;
+	margin: 10px 0 20px 2px;
 }
 
 #estimate_form {
-	float: left;
-	margin-right: 15px;
+	float: right;
+	margin: 0 15px;
+	padding-left: 10px;
+	width: 325px;
+	border-left: 1px dotted #000;
 }
 
-#tree {
-	margin-top: 40px;
+#estimate_form p {
+	margin: 5px 0 0 0;
 }
 
 .fancytree-exp-n {
 	font-style: italic;
+}
+
+.form_legend {
+	margin-left: 110px;
+	color: grey;
+}
+
+.form_step {
+	display: inline-block;
+	width: 100px;
+}
+
+h4 {
+	margin: 0 0 20px 0;
 }

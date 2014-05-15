@@ -168,7 +168,7 @@ class Tree
         $title =  (!empty($rank) ? ucfirst($rank) . ' ' : '') . $name;
         if ($count !== '') {
            $title .= ' (estimate: ' . (!empty($estimation) ? $estimation : '-') .
-            ', total: ' . (!empty($count) ? $count : '-') . ')';
+            ', CoL: ' . (!empty($count) ? $count : '-') . ')';
         }
         return $title;
     }

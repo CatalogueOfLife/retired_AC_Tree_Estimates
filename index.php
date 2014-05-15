@@ -10,19 +10,20 @@
 ?>
 </head>
 <body>
+<!--
 <img src="images/i4life_logo_sm.jpg" width="150" height="62"
     style="right: 0; float: right; padding: 0 10px;" alt="i4Life">
-<h3>i4Life WP4: Species estimates</h3>
+-->
+<h3>Catalogue of Life: Species estimates</h3>
 <?php
     echo '<p class="version">Version ' . Tree::getVersion() . "</p>\n";
     // Test database handler first
-    if (formSubmitted()) {
-        $tree->copyEstimates();
+    if (isset($_POST['copy'])) {
         echo '<p style="color:red; font-weight: bold;" id="alert">Estimates copied successfully</p>';
     }
     include 'includes/form.php';
 ?>
-
-    <div id="tree"></div>
+    <h4>Step 1. Find taxon in the CoL tree</h4
+    ><div id="tree"></div>
 </body>
 </html>

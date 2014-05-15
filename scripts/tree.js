@@ -94,3 +94,10 @@ $(function() {
 $(function() {
 	$("#alert").delay(2000).fadeOut(500);
 });
+
+$(function() {
+	$("#copy_to_col_link").click(function() {
+		$("#copy_to_col").submit();
+		return false;
+	})
+});
