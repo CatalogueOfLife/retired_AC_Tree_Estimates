@@ -101,7 +101,8 @@ class Tree
         $p['estimate'] = (int)$p['estimate'];
         if (!empty($p['id'])) {
             $q = 'UPDATE `estimates` SET `kingdom` = :kingdom, `rank` = :rank, `name` = :name, ' .
-                '`estimate` = :estimate, `source` = :source WHERE `id` = :id';
+                '`estimate` = :estimate, `source` = :source, `updated` = :updated WHERE `id` = :id';
+            $p['updated'] = date('Y-m-d H:i:s');
         } else {
             $q = 'INSERT INTO `estimates` (`kingdom`, `rank`, `name`, `estimate`, `source`) ' .
                 'VALUES (:kingdom, :rank, :name, :estimate, :source)';
