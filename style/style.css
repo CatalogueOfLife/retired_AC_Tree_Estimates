@@ -64,3 +64,15 @@ button {
 h4 {
 	margin: 0 0 20px 0;
 }
+
+.border-top {
+	border-top: 1px dotted #000;
+}
+
+.clear {
+	clear: both;
+}
+
+.padding-top {
+	padding-top: 10px;
+}

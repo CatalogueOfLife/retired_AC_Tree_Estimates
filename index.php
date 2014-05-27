@@ -21,7 +21,9 @@
     }
     include 'includes/form.php';
 ?>
-    <h4>Step 1. Find taxon in the CoL tree</h4
-    ><div id="tree"></div>
+    <h4 class="border-top padding-top">Step 1. Find taxon in the CoL tree</h4>
+    <div id="tree"></div>
+
+<p class="border-top clear" style="padding-top: 25px; width: 800px;">After adding your estimates, as a final step you can <a href="#" id="copy_to_col_link">submit the estimates to the CoL database</a>. Your estimate figure(s) will appear in the tree of this tool and will be copied to the test version of the Catalogue of Life. If you omit this step, your data will be included in the next monthly CoL update.</p>
 </body>
 </html>

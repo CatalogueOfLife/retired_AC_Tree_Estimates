@@ -1,14 +1,14 @@
-<div style="width: 600px; margin-bottom: 35px;">
+<div style="width: 800px; margin-bottom: 35px;">
     <p>Please use this tool to update species estimates in the Catalogue of Life. Estimates can be added to all CoL higher taxa from kingdom to genus.</p>
     <ul>
     <li><strong>Step 1.</strong> Browse to the appropriate taxon in the tree and click on its name. The name of the taxon and its rank will appear in the form on the right.</li>
     <li><strong>Step 2.</strong> Type the estimate species figure and source of information in the form.</li>
     <li><strong>Step 3.</strong> Click 'Submit estimate' to save the data to the database.</li>
     </ul>
-    <p>After adding your estimates, as a final step you can <a href="#" id="copy_to_col_link">submit the estimates to the CoL database</a>. Your estimate figure(s) will appear in the tree of this tool and will be copied to the Catalogue of Life. If you omit this step, your data will be included in the next monthly CoL update.</p>
+<p>CoL is looking for estimate numbers of species recognized by taxonomists at present (it is not about ever described species and each validly published name; it is not about estimation for not described yet species. It is about species concepts KNOWN to taxonomists in current time).</p>
 </div>
 
-<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="estimate_form">
+<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="estimate_form" class="padding-top">
 <h4>Step 2. Add estimate figure and source of information</h4>
 <p>
     <input id="kingdom" name="kingdom" type="hidden" value="">
@@ -44,6 +44,7 @@
     <h4 class="form_step">Step 3.</h4>
     <button id="submit" type="submit">Submit estimate</button>
 </p>
+
 </form>
 
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" id="copy_to_col">
