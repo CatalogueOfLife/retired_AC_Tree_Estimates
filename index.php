@@ -10,10 +10,8 @@
 ?>
 </head>
 <body>
-<!--
-<img src="images/i4life_logo_sm.jpg" width="150" height="62"
-    style="right: 0; float: right; padding: 0 10px;" alt="i4Life">
--->
+<img src="images/logo.png" width="322" height="68"
+    style="right: 0; float: right; padding: 0 10px;" alt="Catalogue of Life">
 <h3>Catalogue of Life: Species estimates</h3>
 <?php
     echo '<p class="version">Version ' . Tree::getVersion() . "</p>\n";

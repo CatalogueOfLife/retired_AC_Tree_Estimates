@@ -27,7 +27,7 @@ label {
 }
 
 input, label, textarea, .form_legend {
-	font-family: "Arial, Helvetica";
+	font-family: Arial, Helvetica;
 	font-size: 11px;
 }
 
