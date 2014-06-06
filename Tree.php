@@ -97,8 +97,8 @@ class Tree
 
     public function saveEstimate ($p)
     {
-        // Make sure estimate is a number
-        $p['estimate'] = (int)$p['estimate'];
+        // Make sure estimate is a number or null
+        $p['estimate'] = !empty($p['estimate']) ? (int)$p['estimate'] : null;
         if (!empty($p['id'])) {
             $q = 'UPDATE `estimates` SET `kingdom` = :kingdom, `rank` = :rank, `name` = :name, ' .
                 '`estimate` = :estimate, `source` = :source, `updated` = :updated WHERE `id` = :id';

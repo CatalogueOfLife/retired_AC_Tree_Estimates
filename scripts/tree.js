@@ -63,9 +63,9 @@ function ucFirst(string) {
 $(function() {
     $("#estimate_form").submit(function() {
     	var submitForm = true;
-    	// Text fields cannot be empty
+    	// Text fields cannot be empty, except estimate, so value can be cleared
     	$("#estimate_form input:text").each(function() {
-    		if ($(this).val().length === 0) {
+    		if ($(this).attr('name') != 'estimate' && $(this).val().length === 0) {
     			alert(ucFirst($(this).attr('name')) + ' cannot be empty');
     			submitForm = false;
     			return false;

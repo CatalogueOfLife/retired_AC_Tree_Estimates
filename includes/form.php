@@ -3,7 +3,7 @@
     <ul>
     <li><strong>Step 1.</strong> Browse to the appropriate taxon in the tree and click on its name. The name of the taxon and its rank will appear in the form on the right.</li>
     <li><strong>Step 2.</strong> Type the estimate species figure and source of information in the form.</li>
-    <li><strong>Step 3.</strong> Click 'Submit estimate' to save the data to the database.</li>
+    <li><strong>Step 3.</strong> Click 'Submit estimate' to save the data to the database. This will save your data to the species estimates database. Your data will not visually appear in the tree on this page until you submit your data to the CoL. You can do so by clicking the link at the bottom of this page.</li>
     </ul>
 <p>CoL is looking for estimate numbers of species recognized by taxonomists at present (it is not about ever described species and each validly published name; it is not about estimation for not described yet species. It is about species concepts KNOWN to taxonomists in current time).</p>
 </div>
